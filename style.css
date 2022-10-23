@@ -21,6 +21,7 @@ html, body {
   justify-content: center;
   align-items: center;
   height: 100%;
+  background-color: #252525;
 }
 
 .game-content {
