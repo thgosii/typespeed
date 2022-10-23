@@ -1,5 +1,3 @@
-const defaultFont = "20px pixeloid_sansregular";
-
 function getWordColorByPosition(x) {
   if (x < 300) {
     return "white";
@@ -24,12 +22,10 @@ Word.prototype.update = function () {
 };
 
 Word.prototype.render = function (ctx, tryText) {
-  ctx.font = defaultFont;
   ctx.fillStyle = this.color;
   ctx.fillText(this.text.toLowerCase(), this.x, this.y);
 
   if (this.text.toLowerCase().startsWith(tryText.toLowerCase())) {
-    ctx.font = defaultFont;
     ctx.fillStyle = "green";
     ctx.fillText(
       this.text.toLowerCase().substring(0, tryText.length),

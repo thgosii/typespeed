@@ -32,8 +32,16 @@ html, body {
 
 .footer-container {
   display: flex;
-  padding: 0 20px;
+  width: 740px;
+  padding: 0 30px;
   align-items: center;
+  justify-content: space-between;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;  
+  justify-content: center;
 }
 
 .decorator {
@@ -43,12 +51,16 @@ html, body {
 }
 
 .game-input {
-  width: 300px;
   padding: 15px;
   height: 30px;
   border: 0;
   outline: none;
   font-size: 16px;
   background-color: transparent;
-  color: #fff;
+  color: white;
+}
+
+.game-value {
+  font-size: 15px;
+  color: white;
 }

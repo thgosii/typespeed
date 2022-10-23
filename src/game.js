@@ -4,6 +4,9 @@ const ctx = canvas.getContext("2d");
 
 // elements
 const gameInput = document.getElementById("game-input");
+const gameLife = document.getElementById("life");
+const gameScore = document.getElementById("score");
+const gameMaxScore = document.getElementById("max-score");
 
 // entities
 let wordEntities = [];
@@ -21,8 +24,20 @@ let gameStatus = GAME_STATUS_PAUSED;
 let isFirstPlay = true;
 
 // game values
+const START_LIVES = 3;
+let life = START_LIVES;
 let score = 0;
+let maxScore = 0;
 
+// audio
+const gameMusic = new Audio("assets/audios/lifelover.mp3");
+
+// font
+const DEFAULT_FONT_FAMILY = "pixeloid_sansregular";
+const defaultFont = `20px ${DEFAULT_FONT_FAMILY}`;
+const gameOverFont = `30px ${DEFAULT_FONT_FAMILY}`;
+
+// screen
 const gameScreen = {
   width: 800,
   height: 600,
@@ -37,9 +52,29 @@ function init() {
 function startGame() {
   wordEntities = [];
   score = 0;
+  life = START_LIVES;
   gameStatus = GAME_STATUS_PLAYING;
+
   gameInput.focus();
   gameInput.onblur = () => gameInput.focus();
+  gameInput.value = "";
+
+  gameScore.innerHTML = `score: ${score}`;
+  gameLife.innerHTML = `life: ${life}`;
+  gameMaxScore.innerHTML = `max score: ${maxScore}`;
+
+  gameMusic.play();
+}
+
+function gameOver() {
+  gameStatus = GAME_STATUS_PAUSED;
+
+  gameMusic.pause();
+  gameMusic.currentTime = 0;
+
+  if (score > maxScore) {
+    maxScore = score;
+  }
 }
 
 function processIntervals() {
@@ -49,11 +84,18 @@ function processIntervals() {
 function checkWordTry() {
   const tryText = gameInput.value.trim();
 
+  let scoreToAdd = 0;
+
   const indexesToRemove = wordEntities
-    .map((wordEntity, index) =>
-      wordEntity.text.toLowerCase() === tryText.toLowerCase() ? index : null
-    )
-    .filter((wordEntity) => wordEntity != null);
+    .map((wordEntity, index) => {
+      if (wordEntity.text.toLowerCase() === tryText.toLowerCase()) {
+        scoreToAdd += 10 * wordEntity.text.length;
+        return index;
+      }
+
+      return null;
+    })
+    .filter((index) => index != null);
 
   const newWordEntities = [];
 
@@ -65,9 +107,13 @@ function checkWordTry() {
 
   wordEntities = newWordEntities;
 
-  gameInput.value = "";
+  if (indexesToRemove.length > 0) {
+    gameInput.value = "";
+  }
 
-  score += indexesToRemove.length * 10;
+  score += scoreToAdd;
+
+  gameScore.innerHTML = `score: ${score}`;
 }
 
 function spawnWord() {
@@ -92,6 +138,13 @@ function update() {
       // removes a word from array after it passes the screen limit
       if (wordEntity.x > gameScreen.width) {
         wordEntities.splice(index, 1);
+
+        life--;
+        gameLife.innerHTML = `life: ${life}`;
+
+        if (life < 1) {
+          gameOver();
+        }
       }
     });
 
@@ -104,11 +157,20 @@ function render() {
   ctx.fillStyle = gameScreen.backgroundColor;
   ctx.fillRect(0, 0, gameScreen.width, gameScreen.height);
 
+  ctx.font = defaultFont;
+
   if (gameStatus === GAME_STATUS_PLAYING) {
     // entities
     wordEntities.forEach((wordEntity) =>
       wordEntity.render(ctx, gameInput.value.trim())
     );
+  } else if (gameStatus === GAME_STATUS_PAUSED) {
+    ctx.font = gameOverFont;
+    ctx.fillStyle = "white";
+    ctx.fillText("PRESS 'SPACE' TO START", 205, 300);
+
+    ctx.fillStyle = "#5195a9";
+    ctx.fillText("TYPESPEED", 305, 360);
   }
 }
 
@@ -120,16 +182,13 @@ function gameLoop() {
 }
 
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
+  if (event.code === "Enter") {
     checkWordTry();
-  } else if (event.key === " ") {
+  } else if (event.code === "Space") {
     if (gameStatus === GAME_STATUS_PAUSED) {
       startGame();
 
       if (isFirstPlay) {
-        const music = new Audio("assets/audios/lifelover.mp3");
-        music.play();
-
         isFirstPlay = false;
       }
     }
