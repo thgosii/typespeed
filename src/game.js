@@ -12,7 +12,7 @@ const gameMaxScore = document.getElementById("max-score");
 let wordEntities = [];
 
 // interval ticks limits
-const wordSpawnTickLimit = 65;
+const wordSpawnTickLimit = 50;
 
 // interval ticks
 let wordSpawnTick = wordSpawnTickLimit;

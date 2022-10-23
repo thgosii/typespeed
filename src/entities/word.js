@@ -16,7 +16,7 @@ function Word(text, y) {
 }
 
 Word.prototype.update = function () {
-  this.x += 2.4;
+  this.x += 3;
 
   this.color = getWordColorByPosition(this.x);
 };
