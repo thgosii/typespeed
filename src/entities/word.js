@@ -1,3 +1,5 @@
+const defaultFont = "18px pixeloid_sansregular";
+
 function getWordColorByPosition(x) {
   if (x < 300) {
     return "white";
@@ -21,8 +23,18 @@ Word.prototype.update = function () {
   this.color = getWordColorByPosition(this.x);
 };
 
-Word.prototype.render = function (ctx) {
-  ctx.font = "20px Arial";
+Word.prototype.render = function (ctx, tryText) {
+  ctx.font = defaultFont;
   ctx.fillStyle = this.color;
-  ctx.fillText(this.text, this.x, this.y);
+  ctx.fillText(this.text.toLowerCase(), this.x, this.y);
+
+  if (this.text.toLowerCase().startsWith(tryText.toLowerCase())) {
+    ctx.font = defaultFont;
+    ctx.fillStyle = "green";
+    ctx.fillText(
+      this.text.toLowerCase().substring(0, tryText.length),
+      this.x,
+      this.y
+    );
+  }
 };

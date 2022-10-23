@@ -9,8 +9,8 @@ const gameInput = document.getElementById("game-input");
 const wordEntites = [];
 
 // interval ticks limits
-const wordsTickLimit = 30;
-const wordSpawnTickLimit = 190;
+const wordsTickLimit = 10;
+const wordSpawnTickLimit = 60;
 
 // interval ticks
 let wordsTick = wordsTickLimit;
@@ -35,10 +35,24 @@ function processIntervals() {
   wordsTick++;
 }
 
+function checkWordTry() {
+  const tryText = gameInput.value;
+
+  const index = wordEntites.findIndex(
+    (wordEntity) => wordEntity.text.toLowerCase() === tryText.toLowerCase()
+  );
+
+  if (index > -1) {
+    wordEntites.splice(index, 1);
+    gameInput.value = "";
+  }
+}
+
 function spawnWord() {
+  const randomText = wordsData[Math.floor(Math.random() * wordsData.length)];
   const randomY = Math.random() * (gameScreen.height - 70) + 50;
 
-  wordEntites.push(new Word("asd", randomY));
+  wordEntites.push(new Word(randomText, randomY));
 }
 
 function update() {
@@ -50,7 +64,14 @@ function update() {
 
   // entities
   if (wordsTick > wordsTickLimit) {
-    wordEntites.forEach((wordEntity) => wordEntity.update());
+    wordEntites.forEach((wordEntity, index) => {
+      wordEntity.update();
+
+      // removes a word from array after it passes the screen limit
+      if (wordEntity.x > gameScreen.width) {
+        wordEntites.splice(index, 1);
+      }
+    });
 
     wordsTick = 0;
   }
@@ -64,7 +85,7 @@ function render() {
   ctx.fillRect(0, 0, gameScreen.width, gameScreen.height);
 
   // entities
-  wordEntites.forEach((wordEntity) => wordEntity.render(ctx));
+  wordEntites.forEach((wordEntity) => wordEntity.render(ctx, gameInput.value));
 }
 
 function gameLoop() {
@@ -73,6 +94,12 @@ function gameLoop() {
 
   window.requestAnimationFrame(gameLoop);
 }
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    checkWordTry();
+  }
+});
 
 init();
 

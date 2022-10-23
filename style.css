@@ -1,5 +1,14 @@
+@font-face {
+  font-family: 'pixeloid_sansregular';
+  src: url('assets/fonts/pixeloidsans-nr3g1.woff2') format('woff2'),
+       url('assets/fonts/pixeloidsans-nr3g1.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 html, body {
   height: 100%;
+  font-family: 'pixeloid_sansregular';
 }
 
 * {
@@ -28,7 +37,7 @@ html, body {
 }
 
 .decorator {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   color: #5195a9;
 }
