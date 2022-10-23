@@ -8,12 +8,12 @@
 
 html, body {
   height: 100%;
-  font-family: 'pixeloid_sansregular';
 }
 
 * {
   margin: 0;
   padding: 0;
+  font-family: 'pixeloid_sansregular';
 }
 
 .main-container {
@@ -26,13 +26,13 @@ html, body {
 .game-content {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
   background-color: #3e3e3e;
 }
 
-.input-container {
+.footer-container {
   display: flex;
-  gap: 20px;
+  padding: 0 20px;
   align-items: center;
 }
 
@@ -48,7 +48,7 @@ html, body {
   height: 30px;
   border: 0;
   outline: none;
-  font-size: 20px;
+  font-size: 16px;
   background-color: transparent;
   color: #fff;
 }

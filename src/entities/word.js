@@ -1,4 +1,4 @@
-const defaultFont = "18px pixeloid_sansregular";
+const defaultFont = "20px pixeloid_sansregular";
 
 function getWordColorByPosition(x) {
   if (x < 300) {
@@ -18,7 +18,7 @@ function Word(text, y) {
 }
 
 Word.prototype.update = function () {
-  this.x += 20;
+  this.x += 2.4;
 
   this.color = getWordColorByPosition(this.x);
 };
