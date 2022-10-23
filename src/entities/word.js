@@ -10,13 +10,13 @@ function getWordColorByPosition(x) {
 
 function Word(text, y) {
   this.text = text;
-  this.x = -200;
+  this.x = -30;
   this.y = y;
   this.color = "white";
 }
 
 Word.prototype.update = function () {
-  this.x += 1;
+  this.x += 20;
 
   this.color = getWordColorByPosition(this.x);
 };
